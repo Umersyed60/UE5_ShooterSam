@@ -65,6 +65,9 @@ void AUE5_ShooterSamCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUE5_ShooterSamCharacter::Look);
+
+		// Shooting
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AUE5_ShooterSamCharacter::Shoot);
 	}
 	else
 	{
@@ -88,6 +91,11 @@ void AUE5_ShooterSamCharacter::Look(const FInputActionValue& Value)
 
 	// route the input
 	DoLook(LookAxisVector.X, LookAxisVector.Y);
+}
+
+void AUE5_ShooterSamCharacter::Shoot()
+{
+	UE_LOG(LogTemp, Display, TEXT("Shooting!!!"));
 }
 
 void AUE5_ShooterSamCharacter::DoMove(float Right, float Forward)
