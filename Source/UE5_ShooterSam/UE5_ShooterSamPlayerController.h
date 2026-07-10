@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+
+#include "HUDWidget.h"
+
 #include "UE5_ShooterSamPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -41,4 +44,12 @@ protected:
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;
 
+public:
+	// Exposes a dropdown in Blueprints to assign your specific Widget Blueprint
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UHUDWidget> HUDWidgetClass;
+
+	// Stores the runtime instance of the created widget to prevent garbage collection
+	UPROPERTY(VisibleAnywhere)
+	UHUDWidget* HUDWidget;
 };
