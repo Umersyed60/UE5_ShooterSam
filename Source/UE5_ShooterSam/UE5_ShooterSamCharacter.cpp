@@ -50,6 +50,17 @@ AUE5_ShooterSamCharacter::AUE5_ShooterSamCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+void AUE5_ShooterSamCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//Spawning Gun Actor and Setting Owner
+	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+	if (Gun) {
+		Gun->SetOwner(this);
+	}
+}
+
 void AUE5_ShooterSamCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
@@ -95,7 +106,9 @@ void AUE5_ShooterSamCharacter::Look(const FInputActionValue& Value)
 
 void AUE5_ShooterSamCharacter::Shoot()
 {
-	UE_LOG(LogTemp, Display, TEXT("Shooting!!!"));
+	if (Gun) {
+		Gun->PullTrigger();
+	}
 }
 
 void AUE5_ShooterSamCharacter::DoMove(float Right, float Forward)
