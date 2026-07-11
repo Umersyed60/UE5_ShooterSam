@@ -50,6 +50,20 @@ AUE5_ShooterSamCharacter::AUE5_ShooterSamCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+void AUE5_ShooterSamCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	GetMesh()->HideBoneByName("weapon_r", EPhysBodyOp::PBO_None);
+
+	//Spawning Gun Actor and Setting Owner
+	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+	if (Gun) {
+		Gun->SetOwner(this);
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+	}
+}
+
 void AUE5_ShooterSamCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
@@ -65,6 +79,9 @@ void AUE5_ShooterSamCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUE5_ShooterSamCharacter::Look);
+
+		// Shooting
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AUE5_ShooterSamCharacter::Shoot);
 	}
 	else
 	{
@@ -88,6 +105,14 @@ void AUE5_ShooterSamCharacter::Look(const FInputActionValue& Value)
 
 	// route the input
 	DoLook(LookAxisVector.X, LookAxisVector.Y);
+}
+
+void AUE5_ShooterSamCharacter::Shoot()
+{
+	//Shooting Gun
+	if (Gun) {
+		Gun->PullTrigger();
+	}
 }
 
 void AUE5_ShooterSamCharacter::DoMove(float Right, float Forward)

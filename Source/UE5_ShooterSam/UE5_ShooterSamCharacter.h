@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+
+#include "Gun.h"
+
 #include "UE5_ShooterSamCharacter.generated.h"
 
 class USpringArmComponent;
@@ -49,12 +52,17 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MouseLookAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* ShootAction;
+
 public:
 
 	/** Constructor */
 	AUE5_ShooterSamCharacter();	
 
 protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -66,6 +74,8 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	void Shoot();
 
 public:
 
@@ -92,5 +102,10 @@ public:
 
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AGun> GunClass;
+
+	AGun* Gun;
 };
 
