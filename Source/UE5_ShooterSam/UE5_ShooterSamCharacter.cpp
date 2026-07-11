@@ -54,13 +54,15 @@ void AUE5_ShooterSamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Hiding Old Weapon in Sekeletal Mesh
 	GetMesh()->HideBoneByName("weapon_r", EPhysBodyOp::PBO_None);
 
-	//Spawning Gun Actor and Setting Owner
+	//Spawning Gun Actor, Setting Owner, and Attaching to a Weapon Socket
 	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
 	if (Gun) {
 		Gun->SetOwner(this);
 		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+		Gun->OwnerController = GetController();
 	}
 }
 

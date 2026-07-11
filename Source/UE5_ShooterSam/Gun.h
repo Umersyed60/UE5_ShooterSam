@@ -31,6 +31,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Mesh;
 
+	AController* OwnerController;
+
 	void PullTrigger();
 
 };
