@@ -34,11 +34,25 @@ void AGun::Tick(float DeltaTime)
 void AGun::PullTrigger()
 {
 	if (OwnerController) {
+		//Getting Player View Location and Rotation to Set Line Trace Position
 		FVector ViewPointLocation;
 		FRotator ViewPointRotation;
 		OwnerController->GetPlayerViewPoint(ViewPointLocation, ViewPointRotation);
 
-		DrawDebugCamera(GetWorld(), ViewPointLocation, ViewPointRotation, 90.0f, 2, FColor::Red, true);
+		//Setting End location of Line Trace
+		FVector EndLocation = ViewPointLocation + ViewPointRotation.Vector() * MaxRange;
+
+		//Setting Off Line Trace To shoot At Objects In World
+		FHitResult HitResult;
+		FCollisionQueryParams Params;
+		Params.AddIgnoredActor(this);
+		Params.AddIgnoredActor(GetOwner());
+		bool IsHit = GetWorld()->LineTraceSingleByChannel(HitResult, ViewPointLocation, EndLocation, ECC_GameTraceChannel2, Params);
+
+		//If Its a Successful Hit
+		if (IsHit) {
+				DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10, 20, FColor::Red, true);
+		}
 	}
 }
 

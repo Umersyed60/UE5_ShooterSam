@@ -31,6 +31,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Mesh;
 
+	UPROPERTY(EditAnywhere)
+	float MaxRange = 10000.0f;
+
 	AController* OwnerController;
 
 	void PullTrigger();
