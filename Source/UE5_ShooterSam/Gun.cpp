@@ -15,13 +15,17 @@ AGun::AGun()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(SceneRoot);
 
+	MuzzleFlashParticleSystem = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Muzzle Flash"));
+	MuzzleFlashParticleSystem->SetupAttachment(SceneRoot);
+
 }
 
 // Called when the game starts or when spawned
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	MuzzleFlashParticleSystem->Deactivate();
 }
 
 // Called every frame
@@ -33,6 +37,8 @@ void AGun::Tick(float DeltaTime)
 
 void AGun::PullTrigger()
 {
+	MuzzleFlashParticleSystem->Activate();
+
 	if (OwnerController) {
 		//Getting Player View Location and Rotation to Set Line Trace Position
 		FVector ViewPointLocation;
@@ -51,7 +57,8 @@ void AGun::PullTrigger()
 
 		//If Its a Successful Hit
 		if (IsHit) {
-				DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10, 20, FColor::Red, true);
+				//DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10, 20, FColor::Red, true);
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ImpactParticleSystem, HitResult.ImpactPoint, HitResult.ImpactPoint.Rotation());
 		}
 	}
 }
