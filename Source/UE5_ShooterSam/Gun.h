@@ -4,6 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+
+#include "Kismet/GameplayStatics.h"
+
 #include "Gun.generated.h"
 
 class UStaticMeshComponent;
@@ -30,6 +36,20 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Mesh;
+
+	UPROPERTY(VisibleAnywhere)
+	UNiagaraComponent* MuzzleFlashParticleSystem;
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* ImpactParticleSystem;
+
+	UPROPERTY(EditAnywhere)
+	float MaxRange = 10000.0f;
+
+	UPROPERTY(EditAnywhere)
+	float BulletDamage = 10.0f;
+
+	AController* OwnerController;
 
 	void PullTrigger();
 

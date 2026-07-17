@@ -15,13 +15,17 @@ AGun::AGun()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(SceneRoot);
 
+	MuzzleFlashParticleSystem = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Muzzle Flash"));
+	MuzzleFlashParticleSystem->SetupAttachment(SceneRoot);
+
 }
 
 // Called when the game starts or when spawned
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	MuzzleFlashParticleSystem->Deactivate();
 }
 
 // Called every frame
@@ -33,6 +37,38 @@ void AGun::Tick(float DeltaTime)
 
 void AGun::PullTrigger()
 {
-	UE_LOG(LogTemp, Display, TEXT("BANG!!!!"));
+	//Activating Gun Muzzle Flash
+	MuzzleFlashParticleSystem->Activate();
+
+	if (OwnerController) {
+		//Getting Player View Location and Rotation to Set Line Trace Position
+		FVector ViewPointLocation;
+		FRotator ViewPointRotation;
+		OwnerController->GetPlayerViewPoint(ViewPointLocation, ViewPointRotation);
+
+		//Setting End location of Line Trace
+		FVector EndLocation = ViewPointLocation + ViewPointRotation.Vector() * MaxRange;
+
+		//Setting Off Line Trace To shoot At Objects In World
+		FHitResult HitResult;
+		FCollisionQueryParams Params;
+		Params.AddIgnoredActor(this);
+		Params.AddIgnoredActor(GetOwner());
+		bool IsHit = GetWorld()->LineTraceSingleByChannel(HitResult, ViewPointLocation, EndLocation, ECC_GameTraceChannel2, Params);
+
+		//If Its a Successful Hit
+		if (IsHit) {
+				//DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10, 20, FColor::Red, true);
+			//Spawning Hit Particles at Ray Impact Point
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ImpactParticleSystem, HitResult.ImpactPoint, HitResult.ImpactPoint.Rotation(),(FVector)0.3F);
+			
+			//Getting Hit Actor To Apply Damage
+			AActor* HitActor = HitResult.GetActor();
+			if (HitActor) {
+				//Applying Damage
+				UGameplayStatics::ApplyDamage(HitActor, BulletDamage, OwnerController, this, UDamageType::StaticClass());
+			}
+		}
+	}
 }
 
