@@ -54,6 +54,7 @@ void AUE5_ShooterSamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Health = MaxHealth;
 	OnTakeAnyDamage.AddDynamic(this, &AUE5_ShooterSamCharacter::OnDamageTaken);
 
 	//Hiding Old Weapon in Sekeletal Mesh
@@ -163,5 +164,13 @@ void AUE5_ShooterSamCharacter::DoJumpEnd()
 
 void AUE5_ShooterSamCharacter::OnDamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	UE_LOG(LogTemp, Display, TEXT("DAMAGE TAKEN %f"), Damage);
+	if (IsAlive) {
+		Health -= Damage;
+
+		if (Health <= 0.0f) {
+			Health = 0.0f;
+			IsAlive = false;
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		}
+	}
 }
