@@ -108,7 +108,7 @@ public:
 
 	AGun* Gun;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly)
 	bool IsAlive = true;
 
 	UPROPERTY(EditAnywhere)
