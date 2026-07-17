@@ -54,6 +54,8 @@ void AUE5_ShooterSamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	OnTakeAnyDamage.AddDynamic(this, &AUE5_ShooterSamCharacter::OnDamageTaken);
+
 	//Hiding Old Weapon in Sekeletal Mesh
 	GetMesh()->HideBoneByName("weapon_r", EPhysBodyOp::PBO_None);
 
@@ -157,4 +159,9 @@ void AUE5_ShooterSamCharacter::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}
+
+void AUE5_ShooterSamCharacter::OnDamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	UE_LOG(LogTemp, Display, TEXT("DAMAGE TAKEN %f"), Damage);
 }

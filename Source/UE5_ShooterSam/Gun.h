@@ -8,6 +8,8 @@
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 
+#include "Kismet/GameplayStatics.h"
+
 #include "Gun.generated.h"
 
 class UStaticMeshComponent;
@@ -43,6 +45,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float MaxRange = 10000.0f;
+
+	UPROPERTY(EditAnywhere)
+	float BulletDamage = 10.0f;
 
 	AController* OwnerController;
 

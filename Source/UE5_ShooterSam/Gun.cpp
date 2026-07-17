@@ -37,6 +37,7 @@ void AGun::Tick(float DeltaTime)
 
 void AGun::PullTrigger()
 {
+	//Activating Gun Muzzle Flash
 	MuzzleFlashParticleSystem->Activate();
 
 	if (OwnerController) {
@@ -58,7 +59,15 @@ void AGun::PullTrigger()
 		//If Its a Successful Hit
 		if (IsHit) {
 				//DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10, 20, FColor::Red, true);
-			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ImpactParticleSystem, HitResult.ImpactPoint, HitResult.ImpactPoint.Rotation());
+			//Spawning Hit Particles at Ray Impact Point
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ImpactParticleSystem, HitResult.ImpactPoint, HitResult.ImpactPoint.Rotation(),(FVector)0.3F);
+			
+			//Getting Hit Actor To Apply Damage
+			AActor* HitActor = HitResult.GetActor();
+			if (HitActor) {
+				//Applying Damage
+				UGameplayStatics::ApplyDamage(HitActor, BulletDamage, OwnerController, this, UDamageType::StaticClass());
+			}
 		}
 	}
 }
