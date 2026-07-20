@@ -7,6 +7,8 @@
 // Sets default values
 AShooterAI::AShooterAI()
 {
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 // Called when the game starts or when spawned
@@ -14,8 +16,18 @@ void AShooterAI::BeginPlay()
 {
 	Super::BeginPlay();
 
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 	if (PlayerPawn) {
 		SetFocus(PlayerPawn);
+	}
+}
+
+// Called every frame
+void AShooterAI::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (PlayerPawn) {
+		MoveToActor(PlayerPawn, 200.0f);
 	}
 }
