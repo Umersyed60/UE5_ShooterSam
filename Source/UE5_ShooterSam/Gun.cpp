@@ -3,6 +3,9 @@
 
 #include "Gun.h"
 
+#define LOG(x) UE_LOG(LogTemp, Display, TEXT(x))
+#define LOG_WARNING(x) UE_LOG(LogTemp, Warning, TEXT(x))
+
 // Sets default values
 AGun::AGun()
 {
@@ -58,7 +61,6 @@ void AGun::PullTrigger()
 
 		//If Its a Successful Hit
 		if (IsHit) {
-				//DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10, 20, FColor::Red, true);
 			//Spawning Hit Particles at Ray Impact Point
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ImpactParticleSystem, HitResult.ImpactPoint, HitResult.ImpactPoint.Rotation(),(FVector)0.3F);
 			
