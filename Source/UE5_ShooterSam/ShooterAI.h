@@ -7,6 +7,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "UE5_ShooterSamCharacter.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 #include "ShooterAI.generated.h"
 

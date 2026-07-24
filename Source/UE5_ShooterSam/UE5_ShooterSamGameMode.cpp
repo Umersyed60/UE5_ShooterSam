@@ -16,9 +16,9 @@ void AUE5_ShooterSamGameMode::BeginPlay()
 	TArray<AActor*> ShooterAIActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AShooterAI::StaticClass(), ShooterAIActors);
 
-	for (int i = 0; i < ShooterAIActors.Num(); i++) {
-		AShooterAI* EnemyAI = Cast<AShooterAI>(ShooterAIActors[i]);
+	for (int32 LoopIndex = 0; LoopIndex < ShooterAIActors.Num(); LoopIndex++) {
+		AShooterAI* ShooterAI = Cast<AShooterAI>(ShooterAIActors[LoopIndex]);
 
-		EnemyAI->StartBehaviorTree(Player);
+		ShooterAI->StartBehaviorTree(Player);
 	}
 }
