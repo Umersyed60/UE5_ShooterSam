@@ -39,14 +39,18 @@ void AShooterAI::Tick(float DeltaTime)
 void AShooterAI::StartBehaviorTree(AUE5_ShooterSamCharacter* Player)
 {
 	if (EnemyAIBehaviorTree) {
+		//Setting reference to my character object in gameplay
 		MyCharacter = Cast<AUE5_ShooterSamCharacter>(GetPawn());
 
 		if (Player) {
+			//Setting reference to player character object in gameplay
 			PlayerCharacter = Player;
 		}
 
+		//Start Behavior Tree Call
 		RunBehaviorTree(EnemyAIBehaviorTree);
 
+		//Setting Values Of Blackboard Variables
 		UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
 		if (BlackboardComponent) {
 			if (PlayerCharacter) {
