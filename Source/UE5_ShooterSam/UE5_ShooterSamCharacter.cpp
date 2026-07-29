@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "UE5_ShooterSam.h"
+#include "UE5_ShooterSamPlayerController.h"
 
 AUE5_ShooterSamCharacter::AUE5_ShooterSamCharacter()
 {
@@ -55,6 +56,9 @@ void AUE5_ShooterSamCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	Health = MaxHealth;
+
+	//Update Health Bar
+	UpdateHUD();
 
 	//Assigning Damage function to Delegate
 	OnTakeAnyDamage.AddDynamic(this, &AUE5_ShooterSamCharacter::OnDamageTaken);
@@ -164,11 +168,28 @@ void AUE5_ShooterSamCharacter::DoJumpEnd()
 	StopJumping();
 }
 
+void AUE5_ShooterSamCharacter::UpdateHUD()
+{
+	AUE5_ShooterSamPlayerController* PlayerController = Cast<AUE5_ShooterSamPlayerController>(GetController());
+	if (PlayerController) {
+		float NewPercent = Health / MaxHealth;
+
+		if (NewPercent < 0.0f) {
+			NewPercent = 0.0f;
+		}
+
+		PlayerController->HUDWidget->SetHealthBarPercent(NewPercent);
+	}
+}
+
 void AUE5_ShooterSamCharacter::OnDamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
 	//If Is Alive Apply Damage
 	if (IsAlive) {
 		Health -= Damage;
+
+		//Update Health Bar
+		UpdateHUD();
 
 		//If Health Is Less Than Zero Case
 		if (Health <= 0.0f) {

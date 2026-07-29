@@ -115,6 +115,8 @@ public:
 	float MaxHealth = 100.0f;
 	float Health;
 
+	void UpdateHUD();
+
 	UFUNCTION()
 	void OnDamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
 };
