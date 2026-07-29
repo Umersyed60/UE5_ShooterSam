@@ -4,6 +4,7 @@
 #include "BTTask_ClearBlackboardValue.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
+//Custom Task Attached To Investigation Node
 UBTTask_ClearBlackboardValue::UBTTask_ClearBlackboardValue()
 {
 	NodeName = TEXT("Clear Blackboard Value");
@@ -15,6 +16,7 @@ EBTNodeResult::Type UBTTask_ClearBlackboardValue::ExecuteTask(UBehaviorTreeCompo
 
 	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	if (Blackboard) {
+		//Clearing Blackboard LastKnownPlayerLocation
 		Blackboard->ClearValue(GetSelectedBlackboardKey());
 	}
 	return EBTNodeResult::Succeeded;
