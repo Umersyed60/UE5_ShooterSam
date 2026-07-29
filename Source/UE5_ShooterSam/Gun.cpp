@@ -43,6 +43,9 @@ void AGun::PullTrigger()
 	//Activating Gun Muzzle Flash
 	MuzzleFlashParticleSystem->Activate();
 
+	//Play Shoot Sound
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), ShootSound, GetActorLocation());
+
 	if (OwnerController) {
 		//Getting Player View Location and Rotation to Set Line Trace Position
 		FVector ViewPointLocation;
@@ -64,6 +67,9 @@ void AGun::PullTrigger()
 			//Spawning Hit Particles at Ray Impact Point
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ImpactParticleSystem, HitResult.ImpactPoint, HitResult.ImpactPoint.Rotation(),(FVector)0.3F);
 			
+			//Play Impact Sound
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), ImpactSound, GetActorLocation());
+
 			//Getting Hit Actor To Apply Damage
 			AActor* HitActor = HitResult.GetActor();
 			if (HitActor) {
