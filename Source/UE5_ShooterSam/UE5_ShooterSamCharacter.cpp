@@ -177,6 +177,9 @@ void AUE5_ShooterSamCharacter::OnDamageTaken(AActor* DamagedActor, float Damage,
 
 			//Disable Capsule Component On Zero Health
 			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+			//Diables Player Input
+			DetachFromControllerPendingDestroy();
 		}
 	}
 }

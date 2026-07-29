@@ -6,6 +6,8 @@
 #include "AIController.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "UE5_ShooterSamCharacter.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 #include "ShooterAI.generated.h"
 
@@ -31,4 +33,12 @@ protected:
 public:
 	UPROPERTY(VisibleAnywhere)
 	APawn* PlayerPawn;
+
+	UPROPERTY(EditAnywhere)
+	UBehaviorTree* EnemyAIBehaviorTree;
+
+	AUE5_ShooterSamCharacter* PlayerCharacter;
+	AUE5_ShooterSamCharacter* MyCharacter;
+
+	void StartBehaviorTree(AUE5_ShooterSamCharacter* Player);
 };
