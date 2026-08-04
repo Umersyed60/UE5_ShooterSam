@@ -53,9 +53,9 @@ void AShooterAI::StartBehaviorTree(AUE5_ShooterSamCharacter* Player)
 		//Setting Values Of Blackboard Variables
 		UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
 		if (BlackboardComponent) {
-			if (PlayerCharacter) {
-				BlackboardComponent->SetValueAsVector("PlayerLocation", PlayerCharacter->GetActorLocation());
-			}
+			//if (PlayerCharacter) {
+			//	BlackboardComponent->SetValueAsVector("PlayerLocation", PlayerCharacter->GetActorLocation());
+			//}
 			if (MyCharacter) {
 				BlackboardComponent->SetValueAsVector("StartLocation", MyCharacter->GetActorLocation());
 			}
