@@ -51,5 +51,8 @@ This project strengthened my skills in **Unreal’s animation workflow, AI behav
 3. Build and run in editor or package for Windows.  
 4. Control the player robot, battle AI enemies, and experience the full gameplay loop.  
 
+## 📹 Project Video Link
+Watch the gameplay clip on LinkedIn: [Expanding My Unreal Portfolio](https://www.linkedin.com/posts/syed-umer-aftab_expanding-my-unreal-portfolio-ive-developed-ugcPost-7490695460760977409-hEFQ/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAC69X2MBd5YEkBw-nbcsGGwhzI8omOUUnsM)
+
 ---
 
