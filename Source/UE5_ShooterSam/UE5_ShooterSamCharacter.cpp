@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "UE5_ShooterSam.h"
+#include "UE5_ShooterSamPlayerController.h"
 
 AUE5_ShooterSamCharacter::AUE5_ShooterSamCharacter()
 {
@@ -50,6 +51,30 @@ AUE5_ShooterSamCharacter::AUE5_ShooterSamCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+void AUE5_ShooterSamCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Health = MaxHealth;
+
+	//Update Health Bar
+	UpdateHUD();
+
+	//Assigning Damage function to Delegate
+	OnTakeAnyDamage.AddDynamic(this, &AUE5_ShooterSamCharacter::OnDamageTaken);
+
+	//Hiding Old Weapon in Sekeletal Mesh
+	GetMesh()->HideBoneByName("weapon_r", EPhysBodyOp::PBO_None);
+
+	//Spawning Gun Actor, Setting Owner, and Attaching to a Weapon Socket
+	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+	if (Gun) {
+		Gun->SetOwner(this);
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+		Gun->OwnerController = GetController();
+	}
+}
+
 void AUE5_ShooterSamCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
@@ -65,6 +90,9 @@ void AUE5_ShooterSamCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUE5_ShooterSamCharacter::Look);
+
+		// Shooting
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AUE5_ShooterSamCharacter::Shoot);
 	}
 	else
 	{
@@ -88,6 +116,14 @@ void AUE5_ShooterSamCharacter::Look(const FInputActionValue& Value)
 
 	// route the input
 	DoLook(LookAxisVector.X, LookAxisVector.Y);
+}
+
+void AUE5_ShooterSamCharacter::Shoot()
+{
+	//Shooting Gun
+	if (Gun) {
+		Gun->PullTrigger();
+	}
 }
 
 void AUE5_ShooterSamCharacter::DoMove(float Right, float Forward)
@@ -130,4 +166,41 @@ void AUE5_ShooterSamCharacter::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}
+
+void AUE5_ShooterSamCharacter::UpdateHUD()
+{
+	AUE5_ShooterSamPlayerController* PlayerController = Cast<AUE5_ShooterSamPlayerController>(GetController());
+	if (PlayerController) {
+		float NewPercent = Health / MaxHealth;
+
+		if (NewPercent < 0.0f) {
+			NewPercent = 0.0f;
+		}
+
+		PlayerController->HUDWidget->SetHealthBarPercent(NewPercent);
+	}
+}
+
+void AUE5_ShooterSamCharacter::OnDamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	//If Is Alive Apply Damage
+	if (IsAlive) {
+		Health -= Damage;
+
+		//Update Health Bar
+		UpdateHUD();
+
+		//If Health Is Less Than Zero Case
+		if (Health <= 0.0f) {
+			Health = 0.0f;
+			IsAlive = false;
+
+			//Disable Capsule Component On Zero Health
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+			//Diables Player Input
+			DetachFromControllerPendingDestroy();
+		}
+	}
 }

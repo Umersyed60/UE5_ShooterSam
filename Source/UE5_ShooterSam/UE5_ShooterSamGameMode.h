@@ -4,6 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+
+#include "UE5_ShooterSamCharacter.h"
+#include "ShooterAI.h"
+#include "Kismet/GameplayStatics.h"
+
 #include "UE5_ShooterSamGameMode.generated.h"
 
 /**
@@ -18,6 +23,9 @@ public:
 	
 	/** Constructor */
 	AUE5_ShooterSamGameMode();
+
+protected:
+	virtual void BeginPlay() override;
 };
 
 

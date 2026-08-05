@@ -31,6 +31,14 @@ void AUE5_ShooterSamPlayerController::BeginPlay()
 		}
 
 	}
+
+	//Code To Add HUD Widget To Gameplay
+	if (HUDWidgetClass) {
+		HUDWidget = CreateWidget<UHUDWidget>(this, HUDWidgetClass);
+		if (HUDWidget) {
+			HUDWidget->AddToViewport();
+		}
+	}
 }
 
 void AUE5_ShooterSamPlayerController::SetupInputComponent()
